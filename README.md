@@ -7,30 +7,27 @@ itgLs is a work in progress with new functionality being added all the time.  In
 
 We are starting out with the following:
 
-**Enhancements to button controls/elements**
+**Enhancements to button controls/elements**<br/>
+itgLs.button.changeIcon<br/>
+itgLs.button.renderAsIcon<br/>
 
-itgLs.button.changeIcon
+**Enhancements to list/table controls**<br/>
+itgLs.list.itemTap<br/>
+itgLs.list.selectAll<br/>
+itgLs.list.unselectAll<br/>
+itgLs.list.selectedCount<br/>
+itgLs.list.selected<br/>
 
-itgLs.button.renderAsIcon
+**Providing checkbox functionality**<br/>
+itgLs.checkbox.render<br/>
+itgLs.checkbox.updateTextCssClasses<br/>
+itgLs.checkbox.setText<br/>
+itgLs.checkbox.addCssClassForText<br/>
+itgLs.checkbox.removeCssClassForText<br/>
+itgLs.checkbox.initializeCss<br/>
 
-
-**Enhancements to list/table controls**
-itgLs.list.itemTap
-itgLs.list.selectAll
-itgLs.list.unselectAll
-itgLs.list.selectedCount
-itgLs.list.selected
-
-**Providing checkbox functionality**
-itgLs.checkbox.render
-itgLs.checkbox.updateTextCssClasses
-itgLs.checkbox.setText
-itgLs.checkbox.addCssClassForText
-itgLs.checkbox.removeCssClassForText
-itgLs.checkbox.initializeCss
-
-**Enhancements to Layout controls**
-itgLs.layout.renderHeader
+**Enhancements to Layout controls**<br/>
+itgLs.layout.renderHeader<br/>
 
 The code is heavily commented along with full intellisense.  We also have tutorials on the blog to help with learning how to implement these enhancements.
 
