@@ -8,7 +8,9 @@ itgLs is a work in progress with new functionality being added all the time.  In
 We are starting out with the following:
 
 **Enhancements to button controls/elements**
+
 itgLs.button.changeIcon
+
 itgLs.button.renderAsIcon
 
 
