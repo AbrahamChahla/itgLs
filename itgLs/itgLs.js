@@ -151,7 +151,12 @@ window.itgLs = window.itgLs || {};
 
 			if (contentItem != null && contentItem._view != null && contentItem._view._container != null) {
 
-				var controlClass = contentItem.model.view.id === ":Table" ? ".msls-table" : ".msls-listview";
+				var controlId = contentItem.model.view.id;
+
+				var controlClass = controlId === ":Table" ? ".msls-table" : ".msls-listview";
+				var itgSelectedClass = "itg-selected-item";
+				var itgSelector = controlId === ":Table" ? "tbody tr.itg-selected-item" : "ul li.itg-selected-item";
+				var lsSelector = controlId === ":Table" ? "tbody tr.ui-btn-active" : "ul li.ui-btn-active";
 
 				// Make sure we have a default allowed count, which is single
 				if (contentItem.totalSelectionsAllowed === undefined)
@@ -161,7 +166,7 @@ window.itgLs = window.itgLs || {};
 				var listView = contentItem._view._container[0].querySelector(controlClass);
 
 				// Get the currently tapped item, in this listview only
-				var item = listView.querySelector('.ui-btn-active');
+				var item = listView.querySelector(lsSelector);
 
 				// Not likely, but make sure there is an item
 				if (item) {
@@ -170,9 +175,9 @@ window.itgLs = window.itgLs || {};
 					if (contentItem.totalSelectionsAllowed === null || contentItem.totalSelectionsAllowed > 1) {
 
 						// If the selected item already was selected, unselect (nullify) the item
-						if (item.classList.contains('itg-selected-item')) {
+						if (item.classList.contains(itgSelectedClass)) {
 							contentItem.screen[contentItem.name].selectedItem = null;
-							item.classList.remove('itg-selected-item');
+							item.classList.remove(itgSelectedClass);
 							item.classList.remove('ui-focus');
 
 							// If the tapped item does not have our custom class showing selected, add it
@@ -181,11 +186,11 @@ window.itgLs = window.itgLs || {};
 							// Get the current count of selected items
 							var selectedCount = 0;
 							if (contentItem.totalSelectionsAllowed !== null)
-								selectedCount = listView.querySelectorAll('.itg-selected-item').length;
+								selectedCount = listView.querySelectorAll(itgSelector).length;
 
 							// If less than the total allowed add the class
 							if (contentItem.totalSelectionsAllowed === null || selectedCount < contentItem.totalSelectionsAllowed) {
-								item.classList.add('itg-selected-item');
+								item.classList.add(itgSelectedClass);
 
 								// Already hit the limit, unselect this item
 							} else {
@@ -198,18 +203,18 @@ window.itgLs = window.itgLs || {};
 					} else {
 
 						// If the selected item already was selected, unselect (nullify) the item
-						if (item.classList.contains('itg-selected-item')) {
+						if (item.classList.contains(itgSelectedClass)) {
 							contentItem.screen[contentItem.name].selectedItem = null;
-							item.classList.remove('itg-selected-item');
+							item.classList.remove(itgSelectedClass);
 							item.classList.remove('ui-focus');
 
 							// Not selected already, so remove any previous selection, and add to this one
 						} else {
-							var prevItem = listView.querySelector('.itg-selected-item');
+							var prevItem = listView.querySelector(itgSelector);
 							if (prevItem !== null)
-								prevItem.classList.remove('itg-selected-item');
+								prevItem.classList.remove(itgSelectedClass)
 
-							item.classList.add('itg-selected-item');
+							item.classList.add(itgSelectedClass);
 						}
 					}
 				}
@@ -231,12 +236,12 @@ window.itgLs = window.itgLs || {};
 			var _data = [];
 
 			if (contentItem != null && contentItem._view !== null && contentItem._view._container !== null) {
-				var controlClass = contentItem.model.view.id === ":Table"
-					? ".msls-table .itg-selected-item"
-					: ".msls-listview .itg-selected-item";
+
+				var controlId = contentItem.model.view.id;
+				var itgSelector = controlId === ":Table" ? "tbody tr.itg-selected-item" : "ul li.itg-selected-item";
 
 				// Get all the items that have our custom class signifying selection
-				var selected = contentItem._view._container[0].querySelectorAll(controlClass);
+				var selected = contentItem._view._container[0].querySelectorAll(itgSelector);
 
 				// Go get the entity data for each selected item, add to the data array
 				_.forEach(selected, function (item) {
@@ -266,18 +271,17 @@ window.itgLs = window.itgLs || {};
 
 			if (contentItem != null && contentItem._view !== null && contentItem._view._container !== null) {
 
-				// What is the control type... which drives how the items are created
-				var selector = contentItem.model.view.id === ":Table"
-					? ".msls-table .itg-selected-item"
-					: ".msls-listview .itg-selected-item";
+				var controlId = contentItem.model.view.id;
+				var itgSelectedClass = "itg-selected-item";
+				var itgSelector = controlId === ":Table" ? "tbody tr.itg-selected-item" : "ul li.itg-selected-item";
 
 				// Get all the items that have our selected class
-				var allItems = contentItem._view._container[0].querySelectorAll(selector);
+				var allItems = contentItem._view._container[0].querySelectorAll(itgSelector);
 
 				// Loop over them all and remove our class
 				_.forEach(allItems, function (item) {
-					if (item.classList.contains('itg-selected-item'))
-						item.classList.remove('itg-selected-item');
+					if (item.classList.contains(itgSelectedClass))
+						item.classList.remove(itgSelectedClass);
 					if (item.classList.contains('ui-focus'))
 						item.classList.remove('ui-focus');
 				});
@@ -300,10 +304,12 @@ window.itgLs = window.itgLs || {};
 
 				if (contentItem.totalSelectionsAllowed === undefined || contentItem.totalSelectionsAllowed === null) {
 
+					var itgSelectedClass = "itg-selected-item";
+
 					// What is the control type... which drives how the items are created
 					var selector = contentItem.model.view.id === ":Table"
-						? ".msls-table .msls-tr"
-						: ".msls-listview .msls-li";
+						? "tbody tr"
+						: "ul li";
 
 					// Get the listview container... then query for all our selected items
 					var allItems = contentItem._view._container[0].querySelectorAll(selector);
@@ -312,8 +318,8 @@ window.itgLs = window.itgLs || {};
 					_.forEach(allItems, function (item) {
 
 						// If the item has not already been selected, add the class
-						if (!item.classList.contains('itg-selected-item'))
-							item.classList.add('itg-selected-item');
+						if (!item.classList.contains(itgSelectedClass))
+							item.classList.add(itgSelectedClass);
 					});
 				}
 
@@ -334,13 +340,11 @@ window.itgLs = window.itgLs || {};
 
 			if (contentItem != null && contentItem._view !== null && contentItem._view._container !== null) {
 
-				// What is the control type... which drives how the items are created
-				var selector = contentItem.model.view.id === ":Table"
-					? ".msls-table .itg-selected-item"
-					: ".msls-listview .itg-selected-item";
+				var controlId = contentItem.model.view.id;
+				var itgSelector = controlId === ":Table" ? "tbody tr.itg-selected-item" : "ul li.itg-selected-item";
 
 				// Get the listview container... allowing independent lists on the same screen
-				_count = contentItem._view._container[0].querySelectorAll(selector).length;
+				_count = contentItem._view._container[0].querySelectorAll(itgSelector).length;
 
 			}
 
@@ -351,6 +355,7 @@ window.itgLs = window.itgLs || {};
 		// ============================================================================================
 		// End of:  Functionality to enhance a ListView/TileView/TableView for multiple selects
 		// ============================================================================================
+
 
 	};
 
